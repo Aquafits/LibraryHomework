@@ -2,7 +2,6 @@ package com.aquafits.library.app;
 
 import com.aquafits.library.business.BookService;
 import com.aquafits.library.data.model.Book;
-import com.aquafits.library.data.model.Category;
 import com.aquafits.library.utils.CategoryFactory;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;

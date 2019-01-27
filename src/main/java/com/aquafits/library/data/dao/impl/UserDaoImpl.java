@@ -2,8 +2,9 @@ package com.aquafits.library.data.dao.impl;
 
 import com.aquafits.library.data.Mock;
 import com.aquafits.library.data.dao.UserDao;
-import com.aquafits.library.data.model.*;
-import org.springframework.security.core.parameters.P;
+import com.aquafits.library.data.model.BorrowStrategy;
+import com.aquafits.library.data.model.Contract;
+import com.aquafits.library.data.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
