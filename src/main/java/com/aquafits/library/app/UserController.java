@@ -27,7 +27,7 @@ public class UserController {
     }
 
     /**
-     * 登录
+     * 非管理员登录
      * 需要form-data
      *
      * @param email
@@ -41,6 +41,10 @@ public class UserController {
         Map<String, String> map = new HashMap<>();
 
         User user = userService.findUserByEmail(email);
+        if(user.getRole().getName().equals("Admin")){
+            map.put("data", "");
+            map.put("success", "false");
+        }
         if (password.equals(user.getPassword())) {
             map.put("data", gson.toJson(user));
             map.put("success", "true");
@@ -50,6 +54,33 @@ public class UserController {
         return map;
     }
 
+    /**
+     * 管理员登录
+     * 需要form-data
+     *
+     * @param email
+     * @param password
+     * @return
+     */
+    @RequestMapping(value = "/auth/admin", method = RequestMethod.POST)
+    public Object adminAuth(@RequestParam(value = "email") String email,
+                       @RequestParam(value = "password") String password) {
+
+        Map<String, String> map = new HashMap<>();
+
+        User user = userService.findUserByEmail(email);
+        if(!user.getRole().getName().equals("Admin")){
+            map.put("data", "");
+            map.put("success", "false");
+        }
+        if (password.equals(user.getPassword())) {
+            map.put("data", gson.toJson(user));
+            map.put("success", "true");
+
+        }
+
+        return map;
+    }
 
     /**
      * 注册

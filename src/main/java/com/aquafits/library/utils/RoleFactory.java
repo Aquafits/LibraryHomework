@@ -19,11 +19,11 @@ public class RoleFactory {
 
     public Role getRole(String role) {
         Role ret = null;
-        for(Role r:roles){
-            if(r.getName().equals(role)){
+        for (Role r : roles) {
+            if (r.getName().equals(role) && (!r.getName().equals("Admin"))) {
                 return r;
             }
-            if(r.getName().equals("Generic")){
+            if (r.getName().equals("Generic")) {
                 ret = r;
             }
         }
