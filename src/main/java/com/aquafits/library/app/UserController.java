@@ -41,11 +41,10 @@ public class UserController {
         Map<String, String> map = new HashMap<>();
 
         User user = userService.findUserByEmail(email);
-        if(user.getRole().getName().equals("Admin")){
+        if(user == null || user.getRole().getName().equals("Admin")){
             map.put("data", "");
             map.put("success", "false");
-        }
-        if (password.equals(user.getPassword())) {
+        }else if (password.equals(user.getPassword())) {
             map.put("data", gson.toJson(user));
             map.put("success", "true");
 
@@ -69,11 +68,10 @@ public class UserController {
         Map<String, String> map = new HashMap<>();
 
         User user = userService.findUserByEmail(email);
-        if(!user.getRole().getName().equals("Admin")){
+        if(user == null || !user.getRole().getName().equals("Admin")){
             map.put("data", "");
             map.put("success", "false");
-        }
-        if (password.equals(user.getPassword())) {
+        }else if (password.equals(user.getPassword())) {
             map.put("data", gson.toJson(user));
             map.put("success", "true");
 

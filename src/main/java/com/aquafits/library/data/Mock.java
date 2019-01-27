@@ -74,9 +74,9 @@ public class Mock {
             User adminUser = new User("1", "admin@lib.com", "admin", null, null,
                     null, "admin", "18724008366", adminRole);
             User teacherUser = new User("2", "teacher@lib.com", "teacher", teacherContracts, teacherStrategy,
-                    "Computer Science", "admin", "18724008366", adminRole);
-            User studentUser = new User("3", "admin@lib.com", "admin", studentContracts, studentStrategy,
-                    "Computer Science", "admin", "18724008366", adminRole);
+                    "Computer Science", "Mike", "18724008366", teacherRole);
+            User studentUser = new User("3", "student@lib.com", "student", studentContracts, studentStrategy,
+                    "Computer Science", "Helen", "18724008366", studentRole);
             users = new ArrayList<>(Arrays.asList(adminUser, teacherUser, studentUser));
 
         } catch (ParseException e) {
