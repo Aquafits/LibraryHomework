@@ -1,13 +1,13 @@
 package com.aquafits.library.business;
 
-import com.aquafits.library.data.model.Book;
+import com.aquafits.library.data.model.books.Book;
 
 import java.util.List;
 
 public interface BookService {
-    Boolean saveBook(Book book);
+    boolean saveBook(Book book);
 
-    Boolean deleteBook(String id);
+    boolean deleteBook(String id);
 
     List<Book> findAll();
 

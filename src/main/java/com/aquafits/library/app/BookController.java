@@ -1,8 +1,8 @@
 package com.aquafits.library.app;
 
 import com.aquafits.library.business.BookService;
-import com.aquafits.library.data.model.Book;
-import com.aquafits.library.utils.CategoryFactory;
+import com.aquafits.library.data.model.books.Book;
+import com.aquafits.library.utils.factory.CategoryFactory;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +14,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/book")
+@CrossOrigin
 public class BookController {
 
     private final BookService bookService;

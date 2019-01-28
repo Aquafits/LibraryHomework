@@ -1,21 +1,22 @@
 package com.aquafits.library.app;
 
 import com.aquafits.library.business.UserService;
-import com.aquafits.library.data.model.User;
-import com.aquafits.library.utils.RoleFactory;
-import com.aquafits.library.utils.StrategyFactory;
+import com.aquafits.library.data.model.users.User;
+import com.aquafits.library.utils.factory.RoleFactory;
+import com.aquafits.library.utils.factory.StrategyFactory;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.security.auth.message.AuthException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController {
 
     private final UserService userService;
@@ -34,20 +35,17 @@ public class UserController {
      * @param password
      * @return
      */
-    @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public Object auth(@RequestParam(value = "email") String email,
-                       @RequestParam(value = "password") String password) {
+    @RequestMapping(value = "/auth/user", method = RequestMethod.POST)
+    public Object userAuth(@RequestParam(value = "email") String email,
+                           @RequestParam(value = "password") String password) {
 
         Map<String, String> map = new HashMap<>();
-
-        User user = userService.findUserByEmail(email);
-        if(user == null || user.getRole().getName().equals("Admin")){
+        try{
             map.put("data", "");
+            map.put("success", ""+userService.authUser(email, password));
+        }catch (AuthException e){
+            map.put("data", e.getMessage());
             map.put("success", "false");
-        }else if (password.equals(user.getPassword())) {
-            map.put("data", gson.toJson(user));
-            map.put("success", "true");
-
         }
 
         return map;
@@ -66,15 +64,12 @@ public class UserController {
                        @RequestParam(value = "password") String password) {
 
         Map<String, String> map = new HashMap<>();
-
-        User user = userService.findUserByEmail(email);
-        if(user == null || !user.getRole().getName().equals("Admin")){
+        try{
             map.put("data", "");
+            map.put("success", ""+userService.authAdmin(email, password));
+        }catch (AuthException e){
+            map.put("data", e.getMessage());
             map.put("success", "false");
-        }else if (password.equals(user.getPassword())) {
-            map.put("data", gson.toJson(user));
-            map.put("success", "true");
-
         }
 
         return map;
@@ -102,7 +97,6 @@ public class UserController {
         user.setPassword(password);
         user.setRole(RoleFactory.getInstance().getRole(role));
         user.setStrategy(StrategyFactory.getInstance().getStrategy(strategy));
-        user.setContracts(new ArrayList<>());
         userService.saveUser(user);
 
         map.put("data", gson.toJson(user));

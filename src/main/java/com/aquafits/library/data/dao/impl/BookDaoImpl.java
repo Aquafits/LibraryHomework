@@ -2,8 +2,8 @@ package com.aquafits.library.data.dao.impl;
 
 import com.aquafits.library.data.dao.BookDao;
 import com.aquafits.library.data.Mock;
-import com.aquafits.library.data.model.Book;
-import com.aquafits.library.data.model.Category;
+import com.aquafits.library.data.model.books.Book;
+import com.aquafits.library.data.model.books.Category;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class BookDaoImpl implements BookDao {
     private List<Category> categories = Mock.getInstance().categories;
 
     @Override
-    public Boolean saveBook(Book book) {
+    public boolean saveBook(Book book) {
         if (book.getId() == null) {
             book.setId("" + (books.size() + 1));
         }else{
@@ -34,7 +34,7 @@ public class BookDaoImpl implements BookDao {
     }
 
     @Override
-    public Boolean deleteBook(String id) {
+    public boolean deleteBook(String id) {
         return books.removeIf(b -> b.getId().equals(id));
     }
 

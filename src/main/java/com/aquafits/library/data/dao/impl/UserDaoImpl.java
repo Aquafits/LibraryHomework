@@ -2,9 +2,9 @@ package com.aquafits.library.data.dao.impl;
 
 import com.aquafits.library.data.Mock;
 import com.aquafits.library.data.dao.UserDao;
-import com.aquafits.library.data.model.BorrowStrategy;
-import com.aquafits.library.data.model.Contract;
-import com.aquafits.library.data.model.User;
+import com.aquafits.library.data.model.strategies.BorrowStrategy;
+import com.aquafits.library.data.model.users.Contract;
+import com.aquafits.library.data.model.users.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,7 +18,7 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public Boolean saveUser(User user) {
+    public boolean saveUser(User user) {
         if (user.getId() == null) {
             user.setId("" + (users.size() + 1));
         } else {
@@ -29,25 +29,29 @@ public class UserDaoImpl implements UserDao {
         }
 
         users.add(user);
-        if (!strategies.contains(user.getStrategy())) {
-            strategies.add(user.getStrategy());
+        BorrowStrategy strategy = user.getStrategy();
+        if(!strategies.contains(strategy)){
+            //strategy做了自增创建
+            strategies.add(strategy);
         }
-        for (Contract c : user.getContracts()) {
+        for (Contract c : user.getStrategy().getContracts()) {
             if (!contracts.contains(c)) {
                 c.setId(""+(contracts.size()+1));
                 contracts.add(c);
             }
         }
-
-        return null;
+        return false;
     }
 
     @Override
-    public Boolean deleteUser(String id) {
+    public boolean deleteUser(String id) {
         User user = findUserById(id);
-        if (user.getContracts() != null) {
-            contracts.removeIf(c -> user.getContracts().contains(c));
+        BorrowStrategy strategy = user.getStrategy();
+
+        if (strategy.getContracts() != null) {
+            contracts.removeIf(c -> strategy.getContracts().contains(c));
         }
+        strategies.removeIf(s -> s.getId().equals(strategy.getId()));
         users.removeIf(u -> u.getId().equals(user.getId()));
         return true;
     }

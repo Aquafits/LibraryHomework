@@ -2,7 +2,7 @@ package com.aquafits.library.business.impl;
 
 import com.aquafits.library.business.BookService;
 import com.aquafits.library.data.dao.BookDao;
-import com.aquafits.library.data.model.Book;
+import com.aquafits.library.data.model.books.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +19,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Boolean saveBook(Book book) {
+    public boolean saveBook(Book book) {
         return bookDao.saveBook(book);
     }
 
     @Override
-    public Boolean deleteBook(String id) {
+    public boolean deleteBook(String id) {
         return bookDao.deleteBook(id);
     }
 

@@ -1,14 +1,15 @@
 package com.aquafits.library.business;
 
-import com.aquafits.library.data.model.User;
+import com.aquafits.library.data.model.users.User;
 
+import javax.security.auth.message.AuthException;
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface UserService {
-    Boolean saveUser(User user);
+    boolean saveUser(User user);
 
-    Boolean deleteUser(String id);
+    boolean deleteUser(String id);
 
     List<User> findAll();
 
@@ -19,4 +20,9 @@ public interface UserService {
     boolean borrowBook(String userId, String bookId);
 
     BigDecimal getPenalty(String id);
+
+    boolean authUser(String email, String password) throws AuthException;
+
+    boolean authAdmin(String email, String password) throws AuthException;
+
 }

@@ -1,14 +1,14 @@
 package com.aquafits.library.data.dao;
 
-import com.aquafits.library.data.model.Book;
+import com.aquafits.library.data.model.books.Book;
 
 import java.util.List;
 
 public interface BookDao {
 
-    Boolean saveBook(Book book);
+    boolean saveBook(Book book);
 
-    Boolean deleteBook(String id);
+    boolean deleteBook(String id);
 
     List<Book> findAll();
 

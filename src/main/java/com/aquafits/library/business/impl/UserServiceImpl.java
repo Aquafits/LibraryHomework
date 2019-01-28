@@ -3,14 +3,14 @@ package com.aquafits.library.business.impl;
 import com.aquafits.library.business.UserService;
 import com.aquafits.library.data.dao.BookDao;
 import com.aquafits.library.data.dao.UserDao;
-import com.aquafits.library.data.model.Book;
-import com.aquafits.library.data.model.Contract;
-import com.aquafits.library.data.model.User;
+import com.aquafits.library.data.model.books.Book;
+import com.aquafits.library.data.model.users.User;
+import com.aquafits.library.exceptions.BorrowException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.message.AuthException;
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -26,12 +26,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Boolean saveUser(User user) {
+    public boolean saveUser(User user) {
         return userDao.saveUser(user);
     }
 
     @Override
-    public Boolean deleteUser(String id) {
+    public boolean deleteUser(String id) {
         return userDao.deleteUser(id);
     }
 
@@ -53,27 +53,41 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean borrowBook(String userId, String bookId) {
         User user = userDao.findUserById(userId);
-        if(user.isBorrowable()){
-            Book book = bookDao.findBookById(bookId);
-
-            Calendar now = Calendar.getInstance();
-            Calendar toReturn = Calendar.getInstance();
-            toReturn.add(Calendar.DATE, user.getStrategy().getMaxBorrowDays());
-
-            Contract contract = new Contract(null, book, now, toReturn, false);
-
-            user.getContracts().add(contract);
-
+        Book book = bookDao.findBookById(bookId);
+        try {
+            user.borrowBook(book);
             userDao.saveUser(user);
-
             return true;
+        }catch (BorrowException e){
+            return false;
         }
-        return false;
     }
 
     @Override
     public BigDecimal getPenalty(String id) {
         User user = userDao.findUserById(id);
         return user.getPenalty();
+    }
+
+    @Override
+    public boolean authUser(String email, String password) throws AuthException {
+        User user = userDao.findUserByEmail(email);
+        if(user == null || user.getRole().getName().equals("Admin")){
+            throw new AuthException("Wrong user role");
+        }else if (!password.equals(user.getPassword())) {
+            throw new AuthException("Wrong email or password");
+        }
+        return true;
+    }
+
+    @Override
+    public boolean authAdmin(String email, String password) throws AuthException {
+        User user = userDao.findUserByEmail(email);
+        if(user == null || !user.getRole().getName().equals("Admin")){
+            throw new AuthException("Wrong user role");
+        }else if (!password.equals(user.getPassword())) {
+            throw new AuthException("Wrong email or password");
+        }
+        return true;
     }
 }

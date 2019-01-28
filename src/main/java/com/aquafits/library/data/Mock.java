@@ -1,11 +1,20 @@
 package com.aquafits.library.data;
 
-import com.aquafits.library.data.model.*;
+import com.aquafits.library.data.model.books.Book;
+import com.aquafits.library.data.model.books.Category;
+import com.aquafits.library.data.model.strategies.BorrowStrategy;
+import com.aquafits.library.data.model.strategies.GenericStrategy;
+import com.aquafits.library.data.model.users.Contract;
+import com.aquafits.library.data.model.users.Role;
+import com.aquafits.library.data.model.users.User;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 public class Mock {
     public List<Role> roles;
@@ -43,7 +52,7 @@ public class Mock {
             Book boringBook = new Book("2", "Math", boringCategory, "pdf",
                     "/storage/Math.pdf", "College Math", new BigDecimal(1.5));
             Book teacherOnlyBook = new Book("3", "Teaching", teacherOnlyCategory, "word",
-                    "/storage/Teaching.docx", "College Teaching", new BigDecimal(1.8));
+                    "/storage/Teaching.docx", "College Teaching", new BigDecimal(2.0));
             books = new ArrayList<>(Arrays.asList(interestingBook, boringBook, teacherOnlyBook));
 
             //set contracts
@@ -65,17 +74,22 @@ public class Mock {
             List<Contract> teacherContracts = new ArrayList<>(Arrays.asList(teacherContract1, teacherContract2));
 
             //set borrow strategies
-            BorrowStrategy studentStrategy = new BorrowStrategy("1", "Student strategy", 10, 30);
-            BorrowStrategy teacherStrategy = new BorrowStrategy("2", "Teacher strategy", 20, 40);
-            BorrowStrategy genericStrategy = new BorrowStrategy("3", "Generic strategy", 0, 0);
-            strategies = new ArrayList<>(Arrays.asList(studentStrategy, teacherStrategy, genericStrategy));
+            BorrowStrategy studentStrategy = new GenericStrategy("1", "Student strategy",
+                    10, 30, new ArrayList<>());
+            studentStrategy.setContracts(studentContracts);
+            BorrowStrategy teacherStrategy = new GenericStrategy("2", "Teacher strategy",
+                    40, 60, new ArrayList<>());
+            teacherStrategy.setContracts(teacherContracts);
+            BorrowStrategy defaultStrategy = new GenericStrategy("3", "Default strategy",
+                    0, 0, new ArrayList<>());
+            strategies = new ArrayList<>(Arrays.asList(studentStrategy, teacherStrategy, defaultStrategy));
 
             //set users
-            User adminUser = new User("1", "admin@lib.com", "admin", null, null,
+            User adminUser = new User("1", "admin@lib.com", "admin", defaultStrategy,
                     null, "admin", "18724008366", adminRole);
-            User teacherUser = new User("2", "teacher@lib.com", "teacher", teacherContracts, teacherStrategy,
+            User teacherUser = new User("2", "teacher@lib.com", "teacher", teacherStrategy,
                     "Computer Science", "Mike", "18724008366", teacherRole);
-            User studentUser = new User("3", "student@lib.com", "student", studentContracts, studentStrategy,
+            User studentUser = new User("3", "student@lib.com", "student", studentStrategy,
                     "Computer Science", "Helen", "18724008366", studentRole);
             users = new ArrayList<>(Arrays.asList(adminUser, teacherUser, studentUser));
 

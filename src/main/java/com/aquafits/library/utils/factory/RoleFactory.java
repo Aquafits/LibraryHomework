@@ -1,7 +1,7 @@
-package com.aquafits.library.utils;
+package com.aquafits.library.utils.factory;
 
 import com.aquafits.library.data.Mock;
-import com.aquafits.library.data.model.Role;
+import com.aquafits.library.data.model.users.Role;
 
 import java.util.List;
 

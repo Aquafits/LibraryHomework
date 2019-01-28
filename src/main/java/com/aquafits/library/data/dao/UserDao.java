@@ -1,13 +1,13 @@
 package com.aquafits.library.data.dao;
 
-import com.aquafits.library.data.model.User;
+import com.aquafits.library.data.model.users.User;
 
 import java.util.List;
 
 public interface UserDao {
-    Boolean saveUser(User user);
+    boolean saveUser(User user);
 
-    Boolean deleteUser(String id);
+    boolean deleteUser(String id);
 
     List<User> findAll();
 
