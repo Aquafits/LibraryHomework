@@ -40,10 +40,10 @@ public class UserController {
                            @RequestParam(value = "password") String password) {
 
         Map<String, String> map = new HashMap<>();
-        try{
+        try {
             map.put("data", "");
-            map.put("success", ""+userService.authUser(email, password));
-        }catch (AuthException e){
+            map.put("success", "" + userService.authUser(email, password));
+        } catch (AuthException e) {
             map.put("data", e.getMessage());
             map.put("success", "false");
         }
@@ -61,13 +61,13 @@ public class UserController {
      */
     @RequestMapping(value = "/auth/admin", method = RequestMethod.POST)
     public Object adminAuth(@RequestParam(value = "email") String email,
-                       @RequestParam(value = "password") String password) {
+                            @RequestParam(value = "password") String password) {
 
         Map<String, String> map = new HashMap<>();
-        try{
+        try {
             map.put("data", "");
-            map.put("success", ""+userService.authAdmin(email, password));
-        }catch (AuthException e){
+            map.put("success", "" + userService.authAdmin(email, password));
+        } catch (AuthException e) {
             map.put("data", e.getMessage());
             map.put("success", "false");
         }
@@ -110,18 +110,24 @@ public class UserController {
      * 更新用户信息
      *
      * @param id
-     * @param user
+     * @param password
+     * @param department
+     * @param nickname
+     * @param phoneNumber
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     public Object register(@PathVariable("id") String id,
-                           @RequestBody User user) {
+                           @RequestParam(value = "password") String password,
+                           @RequestParam(value = "department") String department,
+                           @RequestParam(value = "nickname") String nickname,
+                           @RequestParam(value = "phone_number") String phoneNumber) {
         Map<String, String> map = new HashMap<>();
 
-        userService.saveUser(user);
+        boolean updated = userService.updateUser(id, password, department, nickname, phoneNumber);
 
-        map.put("data", gson.toJson(user));
-        map.put("success", "true");
+        map.put("data", "");
+        map.put("success", "" + updated);
 
         return map;
 
@@ -199,13 +205,14 @@ public class UserController {
     /**
      * 借书
      * 需要form-data
+     *
      * @param id
      * @param bookId
      * @return
      */
     @RequestMapping(value = "/{id}/borrow", method = RequestMethod.POST)
     public Object borrowBook(@PathVariable("id") String id,
-                             @RequestParam(value = "bookId") String bookId ) {
+                             @RequestParam(value = "bookId") String bookId) {
         Map<String, String> map = new HashMap<>();
 
         boolean isBorrowed = userService.borrowBook(id, bookId);

@@ -6,6 +6,8 @@ import com.aquafits.library.data.dao.UserDao;
 import com.aquafits.library.data.model.books.Book;
 import com.aquafits.library.data.model.users.User;
 import com.aquafits.library.exceptions.BorrowException;
+import com.aquafits.library.utils.message.Message;
+import com.aquafits.library.utils.message.MessageSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +60,7 @@ public class UserServiceImpl implements UserService {
             user.borrowBook(book);
             userDao.saveUser(user);
             return true;
-        }catch (BorrowException e){
+        } catch (BorrowException e) {
             return false;
         }
     }
@@ -72,9 +74,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean authUser(String email, String password) throws AuthException {
         User user = userDao.findUserByEmail(email);
-        if(user == null || user.getRole().getName().equals("Admin")){
+        if (user == null || user.getRole().getName().equals("Admin")) {
             throw new AuthException("Wrong user role");
-        }else if (!password.equals(user.getPassword())) {
+        } else if (!password.equals(user.getPassword())) {
             throw new AuthException("Wrong email or password");
         }
         return true;
@@ -83,11 +85,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean authAdmin(String email, String password) throws AuthException {
         User user = userDao.findUserByEmail(email);
-        if(user == null || !user.getRole().getName().equals("Admin")){
+        if (user == null || !user.getRole().getName().equals("Admin")) {
             throw new AuthException("Wrong user role");
-        }else if (!password.equals(user.getPassword())) {
+        } else if (!password.equals(user.getPassword())) {
             throw new AuthException("Wrong email or password");
         }
+        return true;
+    }
+
+    @Override
+    public boolean updateUser(String id, String password, String department, String nickname, String phoneNumber) {
+        User user = userDao.findUserById(id);
+        user.setPassword(password);
+        user.setDepartment(department);
+        user.setNickname(nickname);
+        user.setPhoneNumber(phoneNumber);
+        userDao.saveUser(user);
+
+        Message message = new Message(id, "admin_channel", "user " + id + " changes his/her profile");
+        new MessageSender().send(message);
         return true;
     }
 }

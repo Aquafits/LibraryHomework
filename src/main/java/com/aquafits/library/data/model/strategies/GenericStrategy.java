@@ -53,7 +53,7 @@ public class GenericStrategy extends BorrowStrategy {
     private int getRemainingBorrowTimes() {
         int nowBorrows = 0;
         for (Contract c : contracts) {
-            if (!c.getIsReturned()) {
+            if (!c.isReturned()) {
                 nowBorrows++;
             }
         }

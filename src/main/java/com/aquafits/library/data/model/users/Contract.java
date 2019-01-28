@@ -20,5 +20,5 @@ public class Contract {
 
     private Calendar end;
 
-    private Boolean isReturned;
+    private boolean isReturned;
 }

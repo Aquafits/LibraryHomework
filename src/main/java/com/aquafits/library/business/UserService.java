@@ -25,4 +25,5 @@ public interface UserService {
 
     boolean authAdmin(String email, String password) throws AuthException;
 
+    boolean updateUser(String id, String password, String department, String nickname, String phoneNumber);
 }
