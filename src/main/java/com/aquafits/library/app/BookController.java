@@ -48,8 +48,8 @@ public class BookController {
         Book book = new Book();
         book.setName(name);
         book.setCategory(CategoryFactory.getInstance().getCategory(categoryName));
-        book.setEBookType(eBookType);
-        book.setEBookUrl(eBookUrl);
+        book.setEbookType(eBookType);
+        book.setEbookUrl(eBookUrl);
         book.setDescription(description);
         book.setPenaltyPerDay(BigDecimal.valueOf(Double.valueOf(penaltyPerDay)));
         bookService.saveBook(book);

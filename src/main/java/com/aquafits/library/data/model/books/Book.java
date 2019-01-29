@@ -18,9 +18,9 @@ public class Book {
 
     private Category category;
 
-    private String eBookType;
+    private String ebookType;
 
-    private String eBookUrl;
+    private String ebookUrl;
 
     private String description;
 

@@ -102,7 +102,7 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(phoneNumber);
         userDao.saveUser(user);
 
-        Message message = new Message(id, "admin_channel", "user " + id + " changes his/her profile");
+        Message message = new Message(id, "admin_channel", "a user changes his/her profile");
         new MessageSender().send(message);
         return true;
     }
